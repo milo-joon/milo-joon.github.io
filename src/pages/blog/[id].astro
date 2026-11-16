@@ -1,0 +1,22 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getPosts, fmt } from '../../lib';
+
+export async function getStaticPaths() {
+  return (await getPosts()).map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<Base title={post.data.title} description={post.data.description}>
+  <article>
+    <h1>{post.data.title}</h1>
+    <p class="muted">
+      <time>{fmt(post.data.date)}</time>
+      {post.data.tags.length > 0 && <span> · {post.data.tags.join(', ')}</span>}
+    </p>
+    <Content />
+  </article>
+  <p class="muted" style="margin-top:3em"><a href="/blog/">← 게시글 목록</a></p>
+</Base>

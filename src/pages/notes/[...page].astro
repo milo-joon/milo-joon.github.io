@@ -1,0 +1,31 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getNotes, fmt } from '../../lib';
+
+export const getStaticPaths = (async ({ paginate }) =>
+  paginate(await getNotes(), { pageSize: 30 })) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const notes = await Promise.all(page.data.map(async (n) => ({ n, Content: (await render(n)).Content })));
+---
+<Base title="짧은글">
+  {notes.map(({ n, Content }) => (
+    <article class="note" id={n.id}>
+      <a class="muted" href={`#${n.id}`}><time>{fmt(n.data.date)}</time></a>
+      <Content />
+    </article>
+  ))}
+  <nav class="pager muted">
+    {page.url.prev && <a href={page.url.prev}>← 최근</a>}
+    {page.url.next && <a href={page.url.next}>이전 →</a>}
+  </nav>
+</Base>
+
+<style>
+  .note { padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .note :global(p:first-of-type) { margin-top: 4px; }
+  .note :global(p:last-child) { margin-bottom: 0; }
+  .pager { display: flex; justify-content: space-between; padding-top: 24px; }
+</style>

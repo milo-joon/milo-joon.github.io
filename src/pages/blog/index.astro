@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts, fmt } from '../../lib';
+
+const posts = await getPosts();
+const byYear = Map.groupBy(posts, (p) => p.data.date.getFullYear());
+---
+<Base title="게시글">
+  {[...byYear].map(([year, list]) => (
+    <section>
+      <h2>{year}</h2>
+      <ul class="list">
+        {list.map((p) => (
+          <li><a href={`/blog/${p.id}/`}>{p.data.title}</a><time>{fmt(p.data.date)}</time></li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
