@@ -1,13 +1,13 @@
 ---
 import { SITE } from '../lib';
 interface Props { title?: string; description?: string }
-const { title, description = '개발하며 생각한 것들을 적습니다.' } = Astro.props;
+const { title, description = '생각하면서 끄적이는 공간' } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 const path = Astro.url.pathname;
 const nav = [
   { href: '/', label: '나' },
   { href: '/blog/', label: '게시글' },
-  { href: '/notes/', label: '짧은글' },
+  { href: '/notes/', label: '메모장' },
 ];
 const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
@@ -22,33 +22,48 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <script is:inline>
+      // 저장된 선택이 없으면 시스템 설정을 따름. 화면이 깜빡이지 않게 head에서 먼저 적용
+      try {
+        document.documentElement.dataset.theme =
+          localStorage.getItem('theme') ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      } catch {}
+    </script>
   </head>
   <body>
     <header>
       <a class="brand" href="/">{SITE.title}</a>
       <nav>
         {nav.map((n) => <a href={n.href} aria-current={active(n.href) ? 'page' : undefined}>{n.label}</a>)}
+        <button type="button" class="theme-toggle" aria-label="다크모드 전환"></button>
       </nav>
     </header>
     <main><slot /></main>
     <footer>
       <a href="https://github.com/milo-joon">GitHub</a> · <a href="/rss.xml">RSS</a>
     </footer>
+    <script is:inline>
+      document.querySelector('.theme-toggle').addEventListener('click', () => {
+        const root = document.documentElement;
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+      });
+    </script>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --bg: #fdfdfc; --fg: #1f1f1f; --muted: #74746f; --line: #e6e6e2; --accent: #2b6cb0; --code-bg: #f4f4f2;
-    color-scheme: light dark;
+    --bg: #fbfbfa; --fg: #1d1f21; --muted: #787e84; --line: #e3e6e8; --accent: #0f7b5f; --code-bg: #f0f3f1;
+    --mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    color-scheme: light;
   }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #161616; --fg: #e8e8e6; --muted: #9a9a95; --line: #2c2c2c; --accent: #7fb2e5; --code-bg: #202020; }
-    .astro-code, .astro-code span { color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important; }
-  }
+  /* 다크모드: <html data-theme="dark">일 때 (head 스크립트가 설정) */
+  :root[data-theme='dark'] { --bg: #0e1210; --fg: #d6dfda; --muted: #7b8983; --line: #212a25; --accent: #4fd1a5; --code-bg: #161c19; color-scheme: dark; }
+  [data-theme='dark'] .astro-code, [data-theme='dark'] .astro-code span { color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important; }
   * { box-sizing: border-box; }
   body {
-    margin: 0 auto; max-width: 680px; padding: 0 16px;
+    margin: 0 auto; max-width: 720px; padding: 0 16px;
     background: var(--bg); color: var(--fg);
     font: 17px/1.75 -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', sans-serif;
     word-break: keep-all; overflow-wrap: break-word;
@@ -60,6 +75,10 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
   nav { display: flex; gap: 16px; }
   nav a { color: var(--muted); }
   nav a[aria-current='page'] { color: var(--fg); font-weight: 600; }
+  .theme-toggle { font: inherit; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 4px; padding: 0 8px; cursor: pointer; }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+  .theme-toggle::before { content: '[dark]'; }
+  [data-theme='dark'] .theme-toggle::before { content: '[light]'; }
   main { min-height: 60vh; }
   footer { margin: 80px 0 40px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
   footer a { color: var(--muted); }
@@ -79,4 +98,18 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
   ul.list li { display: flex; justify-content: space-between; gap: 16px; padding: 6px 0; }
   ul.list time { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
   @media (max-width: 480px) { ul.list li { flex-direction: column; gap: 0; } }
+
+  /* 터미널 테마: 메뉴·날짜·소제목은 고정폭, 목록은 날짜가 앞에 오는 로그형 */
+  :is(.brand, nav, time, h2, .muted, footer) { font-family: var(--mono); }
+  .brand::before { content: '~/'; color: var(--accent); }
+  nav { font-size: 0.92rem; }
+  nav a[aria-current='page']::before { content: '> '; color: var(--accent); }
+  h1 { font-size: 1.7rem; letter-spacing: -0.02em; }
+  h2 { font-size: 0.95rem; }
+  h2::before { content: '## '; color: var(--accent); }
+  ul.list li { justify-content: flex-start; border-bottom: 1px dashed var(--line); padding: 8px 0; }
+  ul.list time { order: -1; flex-shrink: 0; min-width: 11.5em; font-size: 0.82rem; }
+  ul.list li a { color: var(--fg); }
+  ul.list li a:hover { color: var(--accent); }
+  pre { border: 1px solid var(--line); border-radius: 4px; }
 </style>

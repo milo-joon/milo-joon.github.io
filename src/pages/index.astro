@@ -28,7 +28,7 @@ const preview = (s = '') => {
   </ul>
   <p class="muted"><a href="/blog/">전체 보기 →</a></p>
 
-  <h2>짧은글</h2>
+  <h2>메모장</h2>
   <ul class="list">
     {notes.map((n) => (
       <li><a href={`/notes/#${n.id}`}>{preview(n.body)}</a><time>{fmt(n.data.date)}</time></li>
