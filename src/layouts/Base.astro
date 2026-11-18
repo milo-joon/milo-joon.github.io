@@ -75,10 +75,11 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
   nav { display: flex; gap: 16px; }
   nav a { color: var(--muted); }
   nav a[aria-current='page'] { color: var(--fg); font-weight: 600; }
-  .theme-toggle { font: inherit; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 4px; padding: 0 8px; cursor: pointer; }
-  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
-  .theme-toggle::before { content: '[dark]'; }
-  [data-theme='dark'] .theme-toggle::before { content: '[light]'; }
+  .theme-toggle { font: inherit; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; }
+  .theme-toggle:hover { color: var(--accent); }
+  /* ponytail: 유니코드 글리프, \FE0E로 이모지 렌더링 방지 */
+  .theme-toggle::before { content: '\263E\FE0E'; }
+  [data-theme='dark'] .theme-toggle::before { content: '\2600\FE0E'; }
   main { min-height: 60vh; }
   footer { margin: 80px 0 40px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
   footer a { color: var(--muted); }
