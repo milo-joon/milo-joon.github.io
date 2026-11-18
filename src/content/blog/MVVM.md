@@ -5,7 +5,7 @@ tags:
   - Kotlin
   - Android
 date: 2026-01-25
-draft: false
+draft: true
 ---
 # MVVM
 - 애플리케이션을 데이터를 처리하는 모델 (Model), 사용자에게 보여지는 UI인 뷰 (View), 뷰에 바인딩 되어 모델과 뷰 사이를 이어주는 뷰 모델 (View Model)로 분리하는 방식

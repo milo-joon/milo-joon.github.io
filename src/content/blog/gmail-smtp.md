@@ -4,7 +4,7 @@ description: gmail-smtp
 tags:
   - Java
 date: 2025-06-21
-draft: false
+draft: true
 ---
 # 이걸 생각하게 된 이유
 - 현재 진행 중인 프로젝트에서 간단하게 **거래명세서를 이메일 전송하는 기능**이 필요했다.

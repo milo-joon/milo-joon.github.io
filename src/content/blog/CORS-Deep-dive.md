@@ -4,7 +4,7 @@ description: CORS-Deep-dive
 tags:
   - Java
 date: 2025-08-18
-draft: false
+draft: true
 ---
 # 들어가며
 웹 개발자라면 개발 시 꼭 한번 부딪히는 문제인 CORS, 프론트엔드 Frontend, Backend를 연결하는 과정에서 콘솔 창에서 아래 에러를 한 번쯤 봤을 것이다.

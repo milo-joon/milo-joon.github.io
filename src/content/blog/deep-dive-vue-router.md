@@ -4,7 +4,7 @@ description: deep-dive about vue-router
 tags:
   - Vue
 date: 2025-04-10
-draft: false
+draft: true
 ---
 # Vue.js를 공부하는 이유
 현재 회사에서 내가 들어오기 전, ERP 프로젝트를 진행하고 있었다. 내가 합류했을 당시에는 Thymeleaf + Spring 조합으로 진행하는 걸로 이야기가 됐었지만,

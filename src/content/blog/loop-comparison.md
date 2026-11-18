@@ -4,7 +4,7 @@ description: loop-comparison
 tags:
   - Javascript
 date: 2025-05-19
-draft: false
+draft: true
 ---
 # 이걸 생각하게 된 이유
 - 현재 프로젝트에서 유효성 검사를 진행하고 있는데, `Vue`단에서 입력 값을 확인하여 검사를 진행해야한다.

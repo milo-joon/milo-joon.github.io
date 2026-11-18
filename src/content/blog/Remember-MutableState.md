@@ -5,7 +5,7 @@ tags:
   - Kotlin
   - Android
 date: 2026-01-20
-draft: false
+draft: true
 ---
 # 상태관리
 

@@ -4,7 +4,7 @@ description: Install WSL in Windows 11 Environment
 tags:
   - Linux
 date: 2025-04-15
-draft: false
+draft: true
 ---
 
 # WSL (Windows Subsystem for Linux)
